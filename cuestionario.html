@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cuestionario: CRUD de Libros</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f8f9fa; color: #222; margin: 0; padding: 0; }
+    .container { max-width: 700px; margin: 2em auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px #0001; padding: 2em; }
+    h1 { color: #2d5c88; border-bottom: 2px solid #2d5c88; padding-bottom: 0.3em; }
+    .question { margin-bottom: 2em; }
+    .question h2 { color: #2980b9; font-size: 1.1em; margin-bottom: 0.5em; }
+    label { display: block; margin-bottom: 0.3em; cursor: pointer; }
+    button { background: #2d5c88; color: #fff; border: none; padding: 0.7em 1.5em; border-radius: 5px; font-size: 1em; cursor: pointer; margin-top: 1em; }
+    button:hover { background: #2980b9; }
+    .result { margin-top: 2em; font-size: 1.2em; font-weight: bold; }
+    .ok { color: #27ae60; }
+    .error { color: #c0392b; }
+    .feedback { margin-top: 0.5em; font-size: 1em; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Cuestionario: CRUD de Libros</h1>
+  <form id="quizForm">
+    <div class="question">
+      <h2>1. ¿Cuál es el propósito principal del archivo <b>libros.proto</b>?</h2>
+      <label><input type="radio" name="q1" value="a"> Definir la estructura de la base de datos SQLite</label>
+      <label><input type="radio" name="q1" value="b"> Definir los mensajes y servicios gRPC</label>
+      <label><input type="radio" name="q1" value="c"> Crear la interfaz HTML</label>
+      <label><input type="radio" name="q1" value="d"> Configurar CORS en Flask</label>
+    </div>
+    <div class="question">
+      <h2>2. ¿Qué librería de Python se utilizó para permitir peticiones desde el navegador (CORS)?</h2>
+      <label><input type="radio" name="q2" value="a"> flask-sqlalchemy</label>
+      <label><input type="radio" name="q2" value="b"> flask-cors</label>
+      <label><input type="radio" name="q2" value="c"> flask-restful</label>
+      <label><input type="radio" name="q2" value="d"> flask-login</label>
+    </div>
+    <div class="question">
+      <h2>3. ¿Cuál es el flujo correcto de una petición para crear un libro desde el frontend?</h2>
+      <label><input type="radio" name="q3" value="a"> HTML → gRPC → API REST → SQLite</label>
+      <label><input type="radio" name="q3" value="b"> HTML → API REST → gRPC → SQLite</label>
+      <label><input type="radio" name="q3" value="c"> HTML → SQLite → API REST → gRPC</label>
+      <label><input type="radio" name="q3" value="d"> HTML → SQLite → gRPC → API REST</label>
+    </div>
+    <div class="question">
+      <h2>4. ¿Qué archivo contiene la lógica para interactuar directamente con la base de datos?</h2>
+      <label><input type="radio" name="q4" value="a"> index.html</label>
+      <label><input type="radio" name="q4" value="b"> server.py</label>
+      <label><input type="radio" name="q4" value="c"> db.py</label>
+      <label><input type="radio" name="q4" value="d"> libros.proto</label>
+    </div>
+    <div class="question">
+      <h2>5. ¿Qué debe hacerse siempre después de modificar el código de los servidores?</h2>
+      <label><input type="radio" name="q5" value="a"> Reiniciar los servidores</label>
+      <label><input type="radio" name="q5" value="b"> Borrar la base de datos</label>
+      <label><input type="radio" name="q5" value="c"> Cambiar el puerto de Flask</label>
+      <label><input type="radio" name="q5" value="d"> Eliminar el archivo proto</label>
+    </div>
+    <button type="submit">Enviar respuestas</button>
+  </form>
+  <div id="result" class="result"></div>
+</div>
+<script>
+const respuestas = {
+  q1: 'b',
+  q2: 'b',
+  q3: 'b',
+  q4: 'c',
+  q5: 'a'
+};
+
+document.getElementById('quizForm').onsubmit = function(e) {
+  e.preventDefault();
+  let correctas = 0;
+  let feedback = '';
+  for (let i = 1; i <= 5; i++) {
+    const q = 'q' + i;
+    const seleccionada = document.querySelector('input[name="' + q + '"]:checked');
+    if (seleccionada) {
+      if (seleccionada.value === respuestas[q]) {
+        correctas++;
+        feedback += `<div class='ok'>Pregunta ${i}: ¡Correcta!</div>`;
+      } else {
+        feedback += `<div class='error'>Pregunta ${i}: Incorrecta</div>`;
+      }
+    } else {
+      feedback += `<div class='error'>Pregunta ${i}: Sin responder</div>`;
+    }
+  }
+  const nota = Math.round((correctas / 5) * 100);
+  document.getElementById('result').innerHTML =
+    `<div>Nota final: <span class='${nota >= 60 ? 'ok' : 'error'}'>${nota}/100</span></div>` +
+    `<div class='feedback'>${feedback}</div>`;
+};
+</script>
+</body>
+</html>

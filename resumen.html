@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Resumen del Proyecto CRUD de Libros</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    h1 { color: #2c3e50; }
+    h2 { color: #2980b9; }
+    ul, ol { margin-bottom: 1em; }
+    .error { color: #c0392b; }
+    .ok { color: #27ae60; }
+  </style>
+</head>
+<body>
+  <h1>Resumen del Proyecto CRUD de Libros</h1>
+  <h2>¿Qué hicimos?</h2>
+  <ul>
+    <li>Definimos un servicio <b>gRPC</b> para gestionar libros con los campos: <b>id, nombre, autor, año de publicación</b>.</li>
+    <li>Implementamos una base de datos <b>SQLite</b> en Python para almacenar los libros de forma persistente.</li>
+    <li>Desarrollamos un servidor <b>gRPC</b> que conecta la base de datos con los métodos CRUD.</li>
+    <li>Construimos una <b>API REST</b> en Flask que actúa como puente entre el frontend y el backend gRPC.</li>
+    <li>Actualizamos el frontend <b>HTML + JavaScript</b> para consumir la API REST y mostrar mensajes de éxito o error.</li>
+    <li>Habilitamos <b>CORS</b> para permitir el acceso desde el navegador.</li>
+  </ul>
+
+  <h2>Errores y cómo los resolvimos</h2>
+  <ol>
+    <li><span class="error">No se guardaban los libros:</span> El backend no devolvía el <b>id</b> generado al crear un libro. <span class="ok">Solución:</span> Modificamos el backend para devolver el libro completo tras crearlo.</li>
+    <li><span class="error">Problemas de CORS:</span> El navegador bloqueaba las peticiones por falta de cabeceras CORS. <span class="ok">Solución:</span> Instalamos y configuramos <b>Flask-CORS</b> para permitir peticiones desde cualquier origen.</li>
+    <li><span class="error">Mensajes poco claros en el frontend:</span> El usuario no sabía si la operación fue exitosa o falló. <span class="ok">Solución:</span> Agregamos mensajes visuales de éxito o error en el HTML.</li>
+  </ol>
+
+  <h2>¿Cómo funciona el flujo?</h2>
+  <ol>
+    <li>El usuario interactúa con el formulario HTML.</li>
+    <li>El frontend envía peticiones a la API REST (Flask).</li>
+    <li>La API REST traduce las peticiones a llamadas gRPC.</li>
+    <li>El servidor gRPC realiza operaciones en la base de datos SQLite.</li>
+    <li>Los resultados se devuelven al frontend y se muestran al usuario.</li>
+  </ol>
+
+  <h2>Recomendaciones</h2>
+  <ul>
+    <li>Siempre reinicia los servidores tras cambios en el código.</li>
+    <li>Verifica la consola del navegador y la terminal para detectar errores.</li>
+    <li>Usa <b>Flask-CORS</b> para evitar problemas de CORS en desarrollo web.</li>
+  </ul>
+
+  <h2>¡Proyecto listo para usar y aprender!</h2>
+</body>
+</html>

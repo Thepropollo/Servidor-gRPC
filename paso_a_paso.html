@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Paso a Paso: CRUD de Libros con gRPC, REST y SQLite</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f8f9fa; color: #222; margin: 0; padding: 0; }
+    .container { max-width: 900px; margin: 2em auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px #0001; padding: 2em; }
+    h1, h2 { color: #2d5c88; }
+    h1 { border-bottom: 2px solid #2d5c88; padding-bottom: 0.3em; }
+    code, pre { background: #f3f3f3; color: #2d5c88; border-radius: 4px; padding: 2px 6px; }
+    pre { display: block; padding: 1em; overflow-x: auto; }
+    ul, ol { margin-bottom: 1.5em; }
+    .step { margin-bottom: 2em; }
+    .file { background: #eaf6ff; border-left: 4px solid #2d5c88; padding: 0.5em 1em; margin: 1em 0; }
+    .cmd { background: #222; color: #fff; padding: 0.2em 0.5em; border-radius: 3px; font-size: 1em; }
+    .tip { background: #eafbe7; color: #1e5631; border-left: 4px solid #27ae60; padding: 0.5em 1em; margin: 1em 0; }
+    .error { color: #c0392b; font-weight: bold; }
+    .ok { color: #27ae60; font-weight: bold; }
+    .structure { background: #f3f3f3; border-radius: 6px; padding: 1em; font-family: 'Consolas', monospace; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Paso a Paso: CRUD de Libros con gRPC, REST y SQLite</h1>
+
+  <div class="step">
+    <h2>1. Inicialización del Proyecto</h2>
+    <ol>
+      <li>Crea una carpeta para el proyecto y entra en ella desde la terminal.</li>
+      <li>Instala los paquetes necesarios:
+        <pre><span class="cmd">pip install flask flask-cors grpcio grpcio-tools</span></pre>
+      </li>
+    </ol>
+  </div>
+
+  <div class="step">
+    <h2>2. Definición del Servicio gRPC</h2>
+    <ul>
+      <li>Crea el archivo <span class="file">libros.proto</span> con la definición de los mensajes y servicios CRUD para libros.</li>
+      <li>Ejemplo de mensaje:
+        <pre>message Libro {
+  int32 id = 1;
+  string nombre = 2;
+  string autor = 3;
+  int32 anio_publicacion = 4;
+}</pre>
+      </li>
+      <li>Genera los archivos Python a partir del proto:
+        <pre><span class="cmd">python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. libros.proto</span></pre>
+      </li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h2>3. Base de Datos SQLite</h2>
+    <ul>
+      <li>Crea <span class="file">db.py</span> con funciones para crear, leer, actualizar y eliminar libros usando SQLite.</li>
+      <li>Ejemplo de función:
+        <pre>def crear_libro(nombre, autor, anio_publicacion):
+    with sqlite3.connect(DB_NAME) as conn:
+        cur = conn.execute(
+            'INSERT INTO libros (nombre, autor, anio_publicacion) VALUES (?, ?, ?)',
+            (nombre, autor, anio_publicacion)
+        )
+        return cur.lastrowid</pre>
+      </li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h2>4. Servidor gRPC</h2>
+    <ul>
+      <li>Crea <span class="file">server.py</span> e implementa los métodos CRUD usando las funciones de <b>db.py</b>.</li>
+      <li>Ejecuta el servidor:
+        <pre><span class="cmd">python server.py</span></pre>
+      </li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h2>5. API REST con Flask</h2>
+    <ul>
+      <li>Crea <span class="file">api_rest.py</span> para exponer endpoints REST que llaman a los métodos gRPC.</li>
+      <li>Habilita CORS con <code>flask_cors</code> para evitar errores en el navegador.</li>
+      <li>Ejecuta la API REST:
+        <pre><span class="cmd">python api_rest.py</span></pre>
+      </li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h2>6. Frontend HTML + JavaScript</h2>
+    <ul>
+      <li>Crea <span class="file">index.html</span> con un formulario y una lista para mostrar los libros.</li>
+      <li>Usa <code>fetch</code> para consumir la API REST y mostrar mensajes de éxito o error.</li>
+      <li>Abre el archivo en tu navegador para interactuar con el CRUD.</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h2>7. Estructura Final del Proyecto</h2>
+    <div class="structure">
+api_rest.py
+server.py
+db.py
+index.html
+libros.proto
+libros_pb2.py
+libros_pb2_grpc.py
+libros.db
+resumen.html
+__pycache__/
+    </div>
+  </div>
+
+  <div class="step">
+    <h2>8. Consejos y Solución de Problemas</h2>
+    <ul>
+      <li><span class="ok">Siempre reinicia los servidores tras cambios en el código.</span></li>
+      <li><span class="ok">Verifica la consola del navegador y la terminal para detectar errores.</span></li>
+      <li><span class="ok">Si ves errores de CORS, asegúrate de tener <b>flask-cors</b> instalado y configurado.</span></li>
+      <li><span class="ok">La base de datos se guarda en <b>libros.db</b> y es persistente.</span></li>
+    </ul>
+  </div>
+
+  <div class="tip">
+    <b>¡Listo! Ahora tienes un CRUD de libros profesional usando gRPC, REST, SQLite y un frontend web.</b>
+  </div>
+</div>
+</body>
+</html>
